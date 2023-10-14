@@ -1,7 +1,7 @@
 # Minecraft Server Image
 [![Project publish](https://github.com/GSaiki26/minecraftserver/actions/workflows/docker-publish.yaml/badge.svg?branch=master)](https://github.com/GSaiki26/minecraftserver/actions/workflows/docker-publish.yaml)
 
-The [minecraft server image](https://hub.docker.com/r/gsaiki26/minecraftserver) is a docker image that has the only objetive to start a Vanilla/Forge server. It also has an [repository](https://github.com/GSaiki26/minecraftserver-image).
+The [minecraft server image](https://hub.docker.com/r/gsaiki26/minecraftserver) is a docker image that has the only objetive to start a Vanilla/Forge server. It also has an [github repository](https://github.com/GSaiki26/minecraftserver-image).
 
 In order to create your own server, you `need` to create an environment file. In the root folder from the repository has a file named `server.env`, an env example.
 
