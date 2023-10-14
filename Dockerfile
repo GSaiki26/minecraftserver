@@ -8,7 +8,7 @@ ENV TZ="America/Sao_Paulo"
 
 # Update the container
 RUN apt-get update; apt-get upgrade -y;
-RUN apt-get install -y bash tar tzdata wget;
+RUN apt-get install -y bash cron tar tzdata wget;
 RUN date;
 
 # Download the jdk
@@ -19,6 +19,10 @@ RUN dpkg -i $JDK_FILE;
 RUN useradd user;
 RUN mkdir /server; chown user /server;
 USER user
+
+# Copy the default cronfile.
+COPY --chown=user ./crontab .
+
 
 # Run the entrypoint
 COPY --chown=user ./entrypoint.sh .
