@@ -30,7 +30,7 @@ function installForge {
   fi
 
   echo "Installing forge server from: $SERVER_TO_DOWNLOAD";
-  wget -qO ./server.jar $SERVER_TO_DOWNLOAD;
+  wget -O ./server.jar $SERVER_TO_DOWNLOAD;
 
   # Install the server.
   java -jar ./server.jar --installServer /server;
@@ -44,7 +44,7 @@ function installVanillaOrCustom {
   fi
 
   echo "Installing vanilla server from: $SERVER_URL";
-  wget -q $SERVER_URL -O ./server.jar;
+  wget -O ./server.jar $SERVER_URL;
   printf "#! /bin/bash\njava -jar @user_jvm_args.txt ./server.jar" > ./run.sh;
   chmod u+x ./run.sh;
 }
