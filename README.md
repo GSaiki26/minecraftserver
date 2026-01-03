@@ -21,7 +21,6 @@ All server's data is saved into `/data`. If not changed in `server.properties` f
 ### Runtime configurations
 | Variable                   |  Default  | Description                                              |
 | -------------------------- | :-------: | -------------------------------------------------------- |
-| `JDK_VERSION`              |   `21`    | Java version used to run the Minecraft server            |
 | `MINECRAFT_VERSION`        | `1.21.11` | Minecraft server version to download and run             |
 | `FABRIC_LOADER_VERSION`    | `0.18.4`  | Fabric loader version                                    |
 | `FABRIC_INSTALLER_VERSION` |  `1.1.1`  | Fabric installer version used to generate the server JAR |
