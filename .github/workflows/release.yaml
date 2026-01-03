@@ -14,8 +14,6 @@ jobs:
 
     env:
       REGISTRY: ghcr.io
-      IMAGE: $GITHUB_REPOSITORY
-      TAG: $GITHUB_REF_NAME
 
     steps:
       - name: Login to Registry
@@ -35,4 +33,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: "${{ env.IMAGE }}:${{ env.TAG }},${{ env.IMAGE }}:latest"
+          tags: "$GITHUB_REPOSITORY:$GITHUB_REF_NAME,$GITHUB_REPOSITORY:latest"
