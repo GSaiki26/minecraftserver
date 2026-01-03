@@ -5,7 +5,7 @@ The `gsaiki26/Minecraftserver` is a Docker image that wraps the minecraft and RC
 First of all, the image is hosted by *Github*, so in order to pull it, you must use: `ghcr.io/gsaiki26/minecraftserver`.
 
 The image is based on `debian:trixie-slim` and runs as `1000:1000`.
-All server's data is saved into `/data`. If not changed in `server.properties` file, the server will be bound on port `25565/UDP`.
+All server's data is saved into `/data`. If not changed in `server.properties` file, the server will be bound on port `25565/TCP`.
 
 > [!IMPORTANT] By the time I'm writing this, the server .jar binary does not listens SIGTERM and SIGINT very well, only if raised by the interactive shell who executed it, so be careful when stopping the server.
 
