@@ -16,8 +16,7 @@ Here's a docker compose example:
 services:
   app:
     container_name: app
-    # image: ghcr.io/gsaiki26/minecraftserver
-    build: .
+    image: ghcr.io/gsaiki26/minecraftserver
     ports:
       - 25545:25545/tcp
       - 25565:25565/tcp
