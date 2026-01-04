@@ -7,8 +7,34 @@ First of all, the image is hosted by *Github*, so in order to pull it, you must 
 The image is based on `debian:trixie-slim` and runs as `1000:1000`.
 All server's data is saved into `/data`. If not changed in `server.properties` file, the server will be bound on port `25565/TCP`.
 
-> [!IMPORTANT]
-> By the time I'm writing this, the server .jar binary does not listens SIGTERM and SIGINT very well, only if raised by the interactive shell who executed it, so be careful when stopping the server.
+Use `MINECRAFT_EULA` for automatically overwrite your EULA agreement.
+
+Any additional variable passed down to the container that has the same prefix as `VAR_PROPERTY_PREFIX`, will be automatically used to overwrite the `server.properties` file on startup. All env must have the same name as the property, just replacing `.` and `-` to `_`.
+
+Here's a docker compose example: 
+```yaml
+services:
+  app:
+    container_name: app
+    # image: ghcr.io/gsaiki26/minecraftserver
+    build: .
+    ports:
+      - 25545:25545/tcp
+      - 25565:25565/tcp
+    environment:
+      MINECRAFT_EULA: true
+      MINECRAFT_SERVER_PORT: 25565
+      MINECRAFT_RCON_PORT: 25565
+      MINECRAFT_MOTD: "Simple docker instance using gsaiki26/minecraftserver \\:D"
+    volumes: [./server:/data:rw]
+
+```
+
+> [!NOTE]
+> `MINECRAFT_` is the default value for `VAR_PROPERTY_PREFIX` :)
+
+
+> [!IMPORTANT] By the time I'm writing this, the server .jar binary does not listens SIGTERM and SIGINT very well, only if raised by the interactive shell who executed it, so be careful when stopping the server.
 
 ### Build configurations
 | Variable         | Default | Description                                               |
@@ -21,12 +47,14 @@ All server's data is saved into `/data`. If not changed in `server.properties` f
 > To customize these options, you must use `--build-arg` flag when building with `docker build`.
 
 ### Runtime configurations
-| Variable                   |  Default  | Description                                              |
-| -------------------------- | :-------: | -------------------------------------------------------- |
-| `MINECRAFT_VERSION`        | `1.21.11` | Minecraft server version to download and run             |
-| `FABRIC_LOADER_VERSION`    | `0.18.4`  | Fabric loader version                                    |
-| `FABRIC_INSTALLER_VERSION` |  `1.1.1`  | Fabric installer version used to generate the server JAR |
-| `JAVA_XMX`                 |   `1G`    | Maximum Java heap size (e.g. 4G)                         |
-| `JAVA_XMS`                 |   `1G`    | Initial Java heap size (e.g. 2G)                         |
+| Variable                   |   Default    | Description                                              |
+| -------------------------- | :----------: | -------------------------------------------------------- |
+| `MINECRAFT_VERSION`        |  `1.21.11`   | Minecraft server version to download and run             |
+| `FABRIC_LOADER_VERSION`    |   `0.18.4`   | Fabric loader version                                    |
+| `FABRIC_INSTALLER_VERSION` |   `1.1.1`    | Fabric installer version used to generate the server JAR |
+| `JAVA_XMX`                 |     `1G`     | Maximum Java heap size (e.g. 4G)                         |
+| `JAVA_XMS`                 |     `1G`     | Initial Java heap size (e.g. 2G)                         |
+| `MINECRAFT_EULA`           |              | The current user's EULA agreement.                       |
+| `VAR_PROPERTY_PREFIX`      | `MINECRAFT_` | Prefix to be used in server.properties replacement.      |
 > [!NOTE]
 > Use [https://fabricmc.net/use/server/](https://fabricmc.net/use/server/) to consult the proper versions.
