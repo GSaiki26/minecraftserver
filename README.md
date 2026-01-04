@@ -1,4 +1,4 @@
-# gsaiki26/Minecraftserver 🧊
+# gsaiki26/minecraftserver 🧊
 The `gsaiki26/Minecraftserver` is a Docker image that wraps the minecraft and RCON client installation.
 
 ## Get started 🔥
