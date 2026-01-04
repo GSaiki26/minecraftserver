@@ -9,7 +9,7 @@ All server's data is saved into `/data`. If not changed in `server.properties` f
 
 Use `MINECRAFT_EULA` for automatically overwrite your EULA agreement.
 
-Any additional variable passed down to the container that has the same prefix as `VAR_PROPERTY_PREFIX`, will be automatically used to overwrite the `server.properties` file on startup. All env must have the same name as the property, just replacing `.` and `-` to `_`.
+Any additional variable passed down to the container that has the same prefix as `VAR_PROPERTY_PREFIX` will be automatically used to overwrite the `server.properties` file on startup. All env must have the same name as the property, just replacing the characters `.` and `-` to `_`.
 
 Here's a docker compose example: 
 ```yaml
