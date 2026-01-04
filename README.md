@@ -1,5 +1,5 @@
 # gsaiki26/minecraftserver 🧊
-The `gsaiki26/Minecraftserver` is a Docker image that wraps the minecraft and RCON client installation.
+The `gsaiki26/minecraftserver` is a Docker image that wraps the minecraft and RCON client installation.
 
 ## Get started 🔥
 First of all, the image is hosted by *Github*, so in order to pull it, you must use: `ghcr.io/gsaiki26/minecraftserver`.
