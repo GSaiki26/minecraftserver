@@ -1,6 +1,6 @@
 # minecraftserver
 
-A minimal Docker image that runs a [Fabric](https://fabricmc.net/) Minecraft server. On first start it downloads the server JAR, agrees to the EULA, and launches — no setup scripts needed outside the container.
+A minimal Docker image that runs a Minecraft server with your choice of mod loader — [Fabric](https://fabricmc.net/) or [NeoForge](https://neoforged.net/). On first start it downloads the server JAR, agrees to the EULA, and launches — no setup scripts needed outside the container.
 
 ---
 
@@ -21,13 +21,20 @@ Data (world, configs, logs) is stored in `/data` inside the container. Mount a v
 
 All settings are passed as environment variables.
 
+### Mod loader
+
+| Variable | Default | Description |
+|---|---|---|
+| `MODLOADER_TYPE` | `neoforge` | Mod loader to use: `neoforge` or `fabric` |
+
 ### Versions
 
 | Variable | Default | Description |
 |---|---|---|
-| `MINECRAFT_VERSION` | `26.3` | Minecraft version |
+| `MINECRAFT_VERSION` | `26.3` | Minecraft version (Fabric only) |
 | `FABRIC_VERSION` | `0.19.5` | Fabric loader version |
 | `FABRIC_INSTALLER_VERSION` | `1.1.2` | Fabric installer version |
+| `NEOFORGE_VERSION` | `21.4.111-beta` | NeoForge version |
 
 ### JVM
 
@@ -35,6 +42,8 @@ All settings are passed as environment variables.
 |---|---|---|
 | `JAVA_XMS` | `256m` | Initial heap size (`-Xms`) |
 | `JAVA_XMX` | `1g` | Maximum heap size (`-Xmx`) |
+
+Extra JVM flags can be placed in `user_jvm_args.txt` inside `/data` — the file is created automatically on first start if it doesn't exist.
 
 ### EULA
 
@@ -59,7 +68,7 @@ Any `SERVER_*` environment variable is mapped to a `server.properties` key and a
 SERVER_LEVEL_NAME=myworld
 SERVER_DIFFICULTY=hard
 SERVER_RCON__PORT="25575"
-SERVER_MAX__PLAYERS="20"
+SERVER_MAX_PLAYERS=20
 ```
 
 ---
@@ -80,7 +89,7 @@ docker build --build-arg JDK_VERSION=21 -t minecraftserver .
 
 | Path | Description |
 |---|---|
-| `/data` | World data, `server.properties`, `eula.txt`, logs |
+| `/data` | World data, `server.properties`, `eula.txt`, `user_jvm_args.txt`, logs |
 
 ---
 
