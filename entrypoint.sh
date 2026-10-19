@@ -16,14 +16,13 @@ JAVA_XMS="${JAVA_XMS:-256m}"
 JAVA_XMX="${JAVA_XMX:-1g}"
 
 SERVER_FILENAME="server.jar"
-SERVER_JAVA_ENTRYPOINT="-jar $SERVER_FILENAME"
+NEOFORGE_ARGS_FILE="libraries/net/neoforged/neoforge/$NEOFORGE_VERSION/unix_args.txt"
 
 
 init_server_fabric() {
     echo "[CONTAINER] Downloading fabric server..."
 
-    wget -O "$SERVER_FILENAME" https://meta.fabricmc.net/v2/versions/loader/$MINECRAFT_VERSION/$FABRIC_VERSION/$FABRIC_INSTALLER_VERSION/server/jar
-    java -jar "$SERVER_FILENAME" --initSettings
+    wget -O "$SERVER_FILENAME" https://meta.fabricmc.net/v2/versions/loader/$MINECRAFT_VERSION/$FABRIC_VERSION/$FABRIC_INSTALLER_VERSION/server/jar || { rm -f "$SERVER_FILENAME"; exit 1; }
 
     echo "[CONTAINER] Downloaded fabric server..."
 }
@@ -31,15 +30,14 @@ init_server_fabric() {
 init_server_neoforge() {
     echo "[CONTAINER] Downloading neoforge server..."
 
-    wget -O "$SERVER_FILENAME" https://maven.neoforged.net/releases/net/neoforged/neoforge/$NEOFORGE_VERSION/neoforge-$NEOFORGE_VERSION-installer.jar
-    java -jar "$SERVER_FILENAME" --install-server && ./run.sh --initSettings
+    wget -O "$SERVER_FILENAME" https://maven.neoforged.net/releases/net/neoforged/neoforge/$NEOFORGE_VERSION/neoforge-$NEOFORGE_VERSION-installer.jar || exit 1
+    java -jar "$SERVER_FILENAME" --install-server || exit 1
 
-    SERVER_JAVA_ENTRYPOINT="@libraries/net/neoforged/neoforge/$NEOFORGE_VERSION/unix_args.txt"
     echo "[CONTAINER] Downloaded neoforge server..."
 }
 
 agree_eula() {
-    sed -i "s/eula=false/eula=true/g" eula.txt
+    echo "eula=true" > eula.txt
 }
 
 override_props() {
@@ -62,16 +60,22 @@ override_props() {
 }
 
 
-if [[ ! -e "$SERVER_FILENAME" ]]; then
-    if [ "$MODLOADER_TYPE" == "fabric" ]; then
-        init_server_fabric
-    fi
-    if [ "$MODLOADER_TYPE" == "neoforge" ]; then
-        init_server_neoforge
-    fi
-fi
+case "$MODLOADER_TYPE" in
+    fabric)
+        [[ -e "$SERVER_FILENAME" ]] || init_server_fabric
+        SERVER_JAVA_ENTRYPOINT="-jar $SERVER_FILENAME"
+        ;;
+    neoforge)
+        [[ -e "$NEOFORGE_ARGS_FILE" ]] || init_server_neoforge
+        SERVER_JAVA_ENTRYPOINT="@$NEOFORGE_ARGS_FILE"
+        ;;
+    *)
+        echo "[CONTAINER] Unknown MODLOADER_TYPE: $MODLOADER_TYPE" >&2
+        exit 1
+        ;;
+esac
 
-if grep -q "eula=false" eula.txt && [[ "$ACCEPT_EULA" == "true" ]]; then
+if [[ "$ACCEPT_EULA" == "true" ]]; then
     agree_eula
 fi
 
@@ -79,5 +83,6 @@ if [[ ! -e "user_jvm_args.txt" ]]; then
     touch user_jvm_args.txt
 fi
 
+touch server.properties
 override_props
 exec java @user_jvm_args.txt -Xms"$JAVA_XMS" -Xmx"$JAVA_XMX" $SERVER_JAVA_ENTRYPOINT --nogui
