@@ -8,5 +8,6 @@ RUN apk add --update --no-cache bash gcompat libgcc "openjdk$JDK_VERSION-jdk" wg
 RUN adduser -Du 1000 server && chown -R server:server .
 COPY --chown=server:server ./entrypoint.sh .
 
+USER server
 RUN chmod u+x entrypoint.sh
 ENTRYPOINT ["/var/lib/minecraftserver/entrypoint.sh"]
