@@ -4,6 +4,18 @@ on:
   push:
     tags:
       - "v*"
+  workflow_call:
+    inputs:
+      version:
+        description: Tag to build (e.g. v2.1.0)
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Tag to build (e.g. v2.1.0)
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -12,9 +24,13 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ inputs.version || github.ref_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ env.VERSION }}
 
       - name: Extract metadata
         id: meta
@@ -22,9 +38,9 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/minecraftserver
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=semver,pattern={{version}},value=${{ env.VERSION }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ env.VERSION }}
+            type=semver,pattern={{major}},value=${{ env.VERSION }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
