@@ -1,7 +1,7 @@
 FROM alpine:3.24
 WORKDIR /var/lib/minecraftserver
 
-ARG JDK_VERSION=25
+ARG JDK_VERSION=21
 
 RUN apk add --update --no-cache bash "openjdk$JDK_VERSION-jdk" wget
 
